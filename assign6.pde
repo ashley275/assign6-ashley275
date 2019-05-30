@@ -39,37 +39,37 @@ boolean rightState = false;
 boolean downState = false;
 
 void setup() {
-  size(640, 480, P2D);
-  frameRate(60);
-  bg = loadImage("img/bg.jpg");
-  title = loadImage("img/title.jpg");
-  gameover = loadImage("img/gameover.jpg");
-  gamewin = loadImage("img/gamewin.jpg");
-  startNormal = loadImage("img/startNormal.png");
-  startHovered = loadImage("img/startHovered.png");
-  restartNormal = loadImage("img/restartNormal.png");
-  restartHovered = loadImage("img/restartHovered.png");
-  groundhogIdle = loadImage("img/groundhogIdle.png");
-  groundhogLeft = loadImage("img/groundhogLeft.png");
-  groundhogRight = loadImage("img/groundhogRight.png");
-  groundhogDown = loadImage("img/groundhogDown.png");
-  life = loadImage("img/life.png");
-  soldier = loadImage("img/soldier.png");
-  dinosaur = loadImage("img/dinosaur.png");
-  robot = loadImage("img/robot.png");
-  cabbage = loadImage("img/cabbage.png");
-  clock = loadImage("img/clock.png");
-  caution = loadImage("img/caution.png");
-  sweethome = loadImage("img/sweethome.png");
+	size(640, 480, P2D);
+	frameRate(60);
+	bg = loadImage("img/bg.jpg");
+	title = loadImage("img/title.jpg");
+	gameover = loadImage("img/gameover.jpg");
+	gamewin = loadImage("img/gamewin.jpg");
+	startNormal = loadImage("img/startNormal.png");
+	startHovered = loadImage("img/startHovered.png");
+	restartNormal = loadImage("img/restartNormal.png");
+	restartHovered = loadImage("img/restartHovered.png");
+	groundhogIdle = loadImage("img/groundhogIdle.png");
+	groundhogLeft = loadImage("img/groundhogLeft.png");
+	groundhogRight = loadImage("img/groundhogRight.png");
+	groundhogDown = loadImage("img/groundhogDown.png");
+	life = loadImage("img/life.png");
+	soldier = loadImage("img/soldier.png");
+	dinosaur = loadImage("img/dinosaur.png");
+	robot = loadImage("img/robot.png");
+	cabbage = loadImage("img/cabbage.png");
+	clock = loadImage("img/clock.png");
+	caution = loadImage("img/caution.png");
+	sweethome = loadImage("img/sweethome.png");
 
-  soilEmpty = loadImage("img/soils/soilEmpty.png");
+	soilEmpty = loadImage("img/soils/soilEmpty.png");
 
-  font = createFont("font/font.ttf", 56);
-  textFont(font);
+	font = createFont("font/font.ttf", 56);
+	textFont(font);
 
-  // Load PImage[][] soils
-  soilImages = new PImage[6][5];
-  for(int i = 0; i < soilImages.length; i++){
+	// Load PImage[][] soils
+	soilImages = new PImage[6][5];
+	for(int i = 0; i < soilImages.length; i++){
 		for(int j = 0; j < soilImages[i].length; j++){
 			soilImages[i][j] = loadImage("img/soils/soil" + i + "/soil" + i + "_" + j + ".png");
 		}
@@ -154,9 +154,9 @@ void initGame(){
 		float newY = SOIL_SIZE * ( i * 4 + floor(random(4)));
 
 		switch(i){
-			case 0: case 1: enemies[i] = new Soldier(newX, newY);
-			case 2: case 3: // Requirement 4: Create new Dinosaur in row 9 - 16
-			case 4: case 5: // Requirement 5: Create new Robot in row 17 - 25
+			case 0: case 1: enemies[i] = new Robot(newX, newY); break;
+			case 2: case 3: enemies[i] = new Dinosaur(newX, newY); break;
+			case 4: case 5: enemies[i] = new Robot(newX, newY); break;
 		}
 
 
@@ -170,11 +170,7 @@ void initGame(){
 		float newX = SOIL_SIZE * floor(random(SOIL_COL_COUNT));
 		float newY = SOIL_SIZE * ( i * 4 + floor(random(4)));
 
-		// Requirement #3:
-		// 	- Randomly decide if a cabbage or a clock should appear in a random soil every 4 rows (6 items in total)
-		// 	- Create and store cabbages/clocks in the same items array
-		// 	- You can use the above newX/newY to set their position in constructor
-
+    items[i] = (floor(random(2)) == 0) ? new Cabbage(newX, newY) : new Clock(newX, newY);
 	}
 }
 
@@ -210,19 +206,17 @@ void draw() {
 	    fill(253,184,19);
 	    ellipse(590,50,120,120);
 
-	    // CAREFUL!
-	    // Because of how this translate value is calculated, the Y value of the ground level is actually 0
+	  // CAREFUL!
+	  // Because of how this translate value is calculated, the Y value of the ground level is actually 0
 		pushMatrix();
 		translate(0, max(SOIL_SIZE * -22, SOIL_SIZE * 1 - player.y));
 
 		// Ground
-
 		fill(124, 204, 25);
 		noStroke();
 		rect(0, -GRASS_HEIGHT, width, GRASS_HEIGHT);
 
 		// Soil
-
 		for(int i = 0; i < SOIL_COL_COUNT; i++){
 			for(int j = 0; j < SOIL_ROW_COUNT; j++){
 
@@ -241,14 +235,15 @@ void draw() {
 		image(sweethome, 0, SOIL_ROW_COUNT * SOIL_SIZE);
 
 		// Items
-		// Requirement #3: Display and check collision with player for each item in Item[] items
+    for(int i = 0; i < items.length; i++){
+      items[i].checkCollision(player);
+      items[i].display();      
+    }
 
 		// Player
-
 		player.update();
 
 		// Enemies
-
 		for(Enemy e : enemies){
 			if(e == null) continue;
 			e.update();
@@ -340,16 +335,16 @@ void addTime(float seconds){
 
 boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float bw, float bh){
 	return	ax + aw > bx &&    // a right edge past b left
-		    ax < bx + bw &&    // a left edge past b right
-		    ay + ah > by &&    // a top edge past b bottom
-		    ay < by + bh;
+		      ax < bx + bw &&    // a left edge past b right
+		      ay + ah > by &&    // a top edge past b bottom
+		      ay < by + bh;
 }
 
 boolean isMouseHit(float bx, float by, float bw, float bh){
 	return	mouseX > bx && 
-		    mouseX < bx + bw && 
-		    mouseY > by && 
-		    mouseY < by + bh;
+		      mouseX < bx + bw && 
+		      mouseY > by && 
+		      mouseY < by + bh;
 }
 
 color getTimeTextColor(int frames){
