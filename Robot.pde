@@ -34,8 +34,8 @@ class Robot extends Enemy {
   }
   
   void update(){
-    checkX = ((direction == FORWARD && x + HAND_OFFSET_X_FORWARD <= player.x) ||
-              (direction == BACKWARD && x + HAND_OFFSET_X_BACKWARD >= player.x)) ? true : false;
+    checkX = ((direction == FORWARD && x + HAND_OFFSET_X_FORWARD <= player.x + player.w/2) ||
+              (direction == BACKWARD && x + HAND_OFFSET_X_BACKWARD >= player.x + player.w/2)) ? true : false;
     
     checkY = (y / SOIL_SIZE + PLAYER_DETECT_RANGE_ROW >= player.row && 
               y / SOIL_SIZE - PLAYER_DETECT_RANGE_ROW <= player.row) ? true : false;
