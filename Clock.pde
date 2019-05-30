@@ -7,8 +7,7 @@ class Clock extends Item {
   void checkCollision(Player player){
     if(!isAlive) return;
     
-    if(isHit(x, y, w, h, player.x, player.y, player.w, player.h)){    
-      player.health ++;      
+    if(isHit(x, y, w, h, player.x, player.y, player.w, player.h)){         
       addTime(CLOCK_BONUS_SECONDS);
       isAlive = false;
     }
