@@ -1,4 +1,7 @@
-
+/*
+  Assign 6 : Final Journey
+  Update : 29.5.2019
+*/
 
 PImage title, gameover, gamewin, startNormal, startHovered, restartNormal, restartHovered;
 PImage groundhogIdle, groundhogLeft, groundhogRight, groundhogDown;
@@ -36,37 +39,37 @@ boolean rightState = false;
 boolean downState = false;
 
 void setup() {
-	size(640, 480, P2D);
-	frameRate(60);
-	bg = loadImage("img/bg.jpg");
-	title = loadImage("img/title.jpg");
-	gameover = loadImage("img/gameover.jpg");
-	gamewin = loadImage("img/gamewin.jpg");
-	startNormal = loadImage("img/startNormal.png");
-	startHovered = loadImage("img/startHovered.png");
-	restartNormal = loadImage("img/restartNormal.png");
-	restartHovered = loadImage("img/restartHovered.png");
-	groundhogIdle = loadImage("img/groundhogIdle.png");
-	groundhogLeft = loadImage("img/groundhogLeft.png");
-	groundhogRight = loadImage("img/groundhogRight.png");
-	groundhogDown = loadImage("img/groundhogDown.png");
-	life = loadImage("img/life.png");
-	soldier = loadImage("img/soldier.png");
-	dinosaur = loadImage("img/dinosaur.png");
-	robot = loadImage("img/robot.png");
-	cabbage = loadImage("img/cabbage.png");
-	clock = loadImage("img/clock.png");
-	caution = loadImage("img/caution.png");
-	sweethome = loadImage("img/sweethome.png");
+  size(640, 480, P2D);
+  frameRate(60);
+  bg = loadImage("img/bg.jpg");
+  title = loadImage("img/title.jpg");
+  gameover = loadImage("img/gameover.jpg");
+  gamewin = loadImage("img/gamewin.jpg");
+  startNormal = loadImage("img/startNormal.png");
+  startHovered = loadImage("img/startHovered.png");
+  restartNormal = loadImage("img/restartNormal.png");
+  restartHovered = loadImage("img/restartHovered.png");
+  groundhogIdle = loadImage("img/groundhogIdle.png");
+  groundhogLeft = loadImage("img/groundhogLeft.png");
+  groundhogRight = loadImage("img/groundhogRight.png");
+  groundhogDown = loadImage("img/groundhogDown.png");
+  life = loadImage("img/life.png");
+  soldier = loadImage("img/soldier.png");
+  dinosaur = loadImage("img/dinosaur.png");
+  robot = loadImage("img/robot.png");
+  cabbage = loadImage("img/cabbage.png");
+  clock = loadImage("img/clock.png");
+  caution = loadImage("img/caution.png");
+  sweethome = loadImage("img/sweethome.png");
 
-	soilEmpty = loadImage("img/soils/soilEmpty.png");
+  soilEmpty = loadImage("img/soils/soilEmpty.png");
 
-	font = createFont("font/font.ttf", 56);
-	textFont(font);
+  font = createFont("font/font.ttf", 56);
+  textFont(font);
 
-	// Load PImage[][] soils
-	soilImages = new PImage[6][5];
-	for(int i = 0; i < soilImages.length; i++){
+  // Load PImage[][] soils
+  soilImages = new PImage[6][5];
+  for(int i = 0; i < soilImages.length; i++){
 		for(int j = 0; j < soilImages[i].length; j++){
 			soilImages[i][j] = loadImage("img/soils/soil" + i + "/soil" + i + "_" + j + ".png");
 		}
