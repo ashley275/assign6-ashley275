@@ -1,13 +1,52 @@
-class Dinosaur {
-	// Requirement #4: Complete Dinosaur Class
+class Dinosaur extends Enemy {
 
-	final float TRIGGERED_SPEED_MULTIPLIER = 5;
+  final float TRIGGERED_SPEED_MULTIPLIER = 5f;
+  float speed = 1f;
+  final int FORWARD = 1, BACKWARD = -1;
+  int direction = FORWARD;
+  float imageDirection = 0;
 
-	// HINT: Player Detection in update()
-	/*
-	float currentSpeed = speed
-	If player is on the same row with me AND (it's on my right side when I'm going right OR on my left side when I'm going left){
-		currentSpeed *= TRIGGERED_SPEED_MULTIPLIER
-	}
-	*/
+  void display(){
+    pushMatrix();
+    translate(x, y);
+    scale(direction, 1);
+    image(dinosaur, imageDirection, 0);
+    popMatrix();
+  }
+  
+  void update(){
+    float currentSpeed = speed;
+    
+    if(y == player.y){
+      if(direction == FORWARD && x + w <= player.x + player.w/2
+      || direction == BACKWARD && x  >= player.x + player.w/2){
+        
+        currentSpeed = TRIGGERED_SPEED_MULTIPLIER;        
+      }      
+    }
+    
+    switch(direction){
+      case FORWARD:
+      x += currentSpeed;
+      if(x >= width - w){
+        direction = BACKWARD;
+        imageDirection = -w;
+        x = width - w;
+      }
+      break;
+      
+      case BACKWARD:
+      x -= currentSpeed;
+      if(x <= 0){
+        direction = FORWARD;
+        imageDirection = 0;
+        x = 0;
+      }
+      break;
+    }    
+  }
+  
+  Dinosaur(float x, float y){
+   super(x, y); 
+  }
 }
