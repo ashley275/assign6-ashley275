@@ -1,10 +1,10 @@
 class Robot extends Enemy {
 
-	final int PLAYER_DETECT_RANGE_ROW = 2;
-	final int LASER_COOLDOWN = 180;
-	final int HAND_OFFSET_Y = 37;
-	final int HAND_OFFSET_X_FORWARD = 64;
-	final int HAND_OFFSET_X_BACKWARD = 16;
+  final int PLAYER_DETECT_RANGE_ROW = 2;
+  final int LASER_COOLDOWN = 180;
+  final int HAND_OFFSET_Y = 37;
+  final int HAND_OFFSET_X_FORWARD = 64;
+  final int HAND_OFFSET_X_BACKWARD = 16;
 
   float speed = 2f;  
   float currentSpeed = speed;
