@@ -1,27 +1,79 @@
-class Robot {
-	// Requirement #5: Complete Dinosaur Class
+class Robot extends Enemy {
 
-	final int PLAYER_DETECT_RANGE_ROW = 2;
-	final int LASER_COOLDOWN = 180;
-	final int HAND_OFFSET_Y = 37;
-	final int HAND_OFFSET_X_FORWARD = 64;
-	final int HAND_OFFSET_X_BACKWARD = 16;
+  final int PLAYER_DETECT_RANGE_ROW = 2;
+  final int LASER_COOLDOWN = 180;
+  final int HAND_OFFSET_Y = 37;
+  final int HAND_OFFSET_X_FORWARD = 64;
+  final int HAND_OFFSET_X_BACKWARD = 16;
+  float speed = 2f;
+  final int FORWARD = 1, BACKWARD = -1;
+  int direction = FORWARD;
+  float imageDirection = 0;
+  int handOffsetX = HAND_OFFSET_X_FORWARD;
+  
+  Laser laser;
+  
+  void checkCollision(Player player){
+    super.checkCollision(player);
+    laser.checkCollision(player);
+  }
 
-	// HINT: Player Detection in update()
-	/*
-
-	boolean checkX = ( Is facing forward AND player's center point is in front of my hand point )
-					OR ( Is facing backward AND player's center point (x + w/2) is in front of my hand point )
-
-	boolean checkY = player is less than (or equal to) 2 rows higher or lower than me
-
-	if(checkX AND checkY){
-		Is laser's cooldown ready?
-			True  > Fire laser from my hand!
-			False > Don't do anything
-	}else{
-		Keep moving!
-	}
-
-	*/
+  void display(){
+    pushMatrix();
+    translate(x, y);
+    scale(direction, 1);
+    image(robot, imageDirection, 0);
+    popMatrix();
+    
+    laser.display();
+  }
+  
+  void update(){
+    float currentSpeed = speed;
+    boolean checkX = false, checkY = false;
+    int laserTimer = LASER_COOLDOWN;
+    
+    if(direction == FORWARD && x + HAND_OFFSET_X_FORWARD <= player.x + player.w/2
+    || direction == BACKWARD && x + HAND_OFFSET_X_BACKWARD >= player.x + player.w/2) checkX = true;
+    
+    if(y / SOIL_SIZE + PLAYER_DETECT_RANGE_ROW >= player.row 
+    && y / SOIL_SIZE - PLAYER_DETECT_RANGE_ROW <= player.row) checkY = true;
+    
+    if(checkX && checkY){
+      
+        currentSpeed = 0;
+        if(laserTimer == LASER_COOLDOWN){
+          laser.fire(x + handOffsetX, y + HAND_OFFSET_Y, player.x + w/2, player.y + h/2);
+          laser.update();
+          laserTimer--;
+        }else if(laserTimer == 0) laserTimer = LASER_COOLDOWN;
+    }
+    
+    switch(direction){
+      case FORWARD:
+      x += currentSpeed;
+      if(x >= width - w){
+        direction = BACKWARD;
+        imageDirection = -w;
+        handOffsetX = HAND_OFFSET_X_BACKWARD;
+        x = width - w;
+      }
+      break;
+      
+      case BACKWARD:
+      x -= currentSpeed;
+      if(x <= 0){
+        direction = FORWARD;
+        imageDirection = 0;
+        handOffsetX = HAND_OFFSET_X_FORWARD;
+        x = 0;
+      }
+      break;
+    }    
+  }
+  
+  Robot(float x, float y){
+   super(x, y);
+   laser = new Laser();
+  }
 }
