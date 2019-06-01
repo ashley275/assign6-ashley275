@@ -1,7 +1,7 @@
 class Cabbage extends Item {
 
   void display(){
-    if(isAlive) image(cabbage, x, y);
+    if(isAlive) image(cabbage, x, y, w, h);
   }
 
   void checkCollision(Player player){
